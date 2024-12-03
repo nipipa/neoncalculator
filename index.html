@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расчет вывески</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            background: #28a745;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #218838;
+        }
+
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .result {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .result span {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Расчет вывески</h1>
+        <div class="form-group">
+            <label for="width">Ширина (мм):</label>
+            <input type="number" id="width" placeholder="Введите ширину">
+        </div>
+        <div class="form-group">
+            <label for="height">Высота (мм):</label>
+            <input type="number" id="height" placeholder="Введите высоту">
+        </div>
+        <div class="form-group">
+            <label for="length">Длина неона (м):</label>
+            <input type="number" id="length" placeholder="Введите длину неона">
+        </div>
+        <div class="form-group">
+            <label for="elements">Количество элементов:</label>
+            <input type="number" id="elements" placeholder="Введите количество элементов">
+        </div>
+        <div class="form-group">
+            <label for="color">Цвет неона:</label>
+            <select id="color">
+                <option value="зеленый">Зеленый</option>
+                <option value="лимонный">Лимонный</option>
+                <option value="синий">Синий</option>
+                <option value="голубой">Голубой</option>
+                <option value="красный">Красный</option>
+                <option value="хб">ХБ</option>
+                <option value="тб">ТБ</option>
+                <option value="оранжевый">Оранжевый</option>
+                <option value="фиолетовый">Фиолетовый</option>
+                <option value="розовый">Розовый</option>
+                <option value="RGB">RGB</option>
+            </select>
+        </div>
+        <button class="btn" onclick="calculate()">Рассчитать</button>
+
+        <div class="results">
+            <div class="result" id="total-cost">Итого себестоимость РОССИЯ: <span>0 RUB</span></div>
+            <div class="result" id="sign-price">Цена вывески РОССИЯ: <span>0 RUB</span></div>
+            <div class="result" id="total-cost-GEL">Итого себестоимость ГРУЗИЯ: <span>0 GEL</span></div>
+            <div class="result" id="sign-price-GEL">Цена вывески ГРУЗИЯ: <span>0 GEL</span></div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const width = parseFloat(document.getElementById("width").value) || 0;
+            const height = parseFloat(document.getElementById("height").value) || 0;
+            const elements = parseInt(document.getElementById("elements").value) || 0;
+            const neonLength = parseFloat(document.getElementById("length").value) || 0;
+            const color = document.getElementById("color").value;
+
+            let length_cost = 0;
+            let kef = 0;
+
+            const colorPrices = {
+                "зеленый": 158.48,
+                "лимонный": 158.48,
+                "синий": 158.48,
+                "голубой": 195.54,
+                "красный": 158.48,
+                "хб": 158.48,
+                "тб": 158.48,
+                "оранжевый": 162.76,
+                "фиолетовый": 162.76,
+                "розовый": 162.76,
+                "RGB": 300.0
+            };
+
+            const rashodniki = {
+                "полистирол": 0.0012,
+                "пупырка": 0.000016,
+                "печать": 0.0016,
+                "дюбель": 0.48,
+                "саморез": 0.5
+            };
+
+            if (neonLength <= 2) { length_cost = 150; }
+            else if (neonLength > 2 && neonLength <= 10) { length_cost = 550; }
+            else if (neonLength > 10 && neonLength <= 15) { length_cost = 750; }
+            else { length_cost = 1300; }
+
+            if (elements <= 15) { kef = 5; }
+            else if (elements > 15 && elements <= 25) { kef = 6; }
+            else if (elements > 25 && elements <= 40) { kef = 7; }
+            else if (elements > 40 && elements <= 75) { kef = 8; }
+            else { kef = 9; }
+
+            const neonPricePerMeter = colorPrices[color] || 0;
+            const sqr = width * height;
+            const sqr_polistirol = sqr * rashodniki["полистирол"];
+            const sqr_pupirka = sqr * rashodniki["пупырка"];
+            const cost_neon = neonLength * neonPricePerMeter;
+
+            const summary_sibik = Math.round(sqr_polistirol + cost_neon + sqr_pupirka + length_cost + 50);
+            const summary_total = Math.round(summary_sibik * kef);
+
+            const summary_sibik_GEL = Math.round(summary_sibik / 30);
+            const summary_total_GEL = Math.round(summary_total / 30);
+
+            document.getElementById("total-cost").innerHTML = `Итого себестоимость РОССИЯ: <span>${summary_sibik} RUB</span>`;
+            document.getElementById("sign-price").innerHTML = `Цена вывески РОССИЯ: <span>${summary_total} RUB</span>`;
+            document.getElementById("total-cost-GEL").innerHTML = `Итого себестоимость ГРУЗИЯ: <span>${summary_sibik_GEL} GEL</span>`;
+            document.getElementById("sign-price-GEL").innerHTML = `Цена вывески ГРУЗИЯ: <span>${summary_total_GEL} GEL</span>`;
+        }
+    </script>
+</body>
+
+</html>
