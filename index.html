@@ -177,7 +177,7 @@
             const neonPricePerMeter = colorPrices[color] || 0;
             const sqr = width * height;
             const sqr_polistirol = sqr * rashodniki["полистирол"];
-            const sqr_pupirka = sqr * rashodniki["пупырка"];
+            const sqr_pupirka = 4 * sqr * rashodniki["пупырка"];
             const cost_neon = neonLength * neonPricePerMeter;
 
             const summary_sibik = Math.round(sqr_polistirol + cost_neon + sqr_pupirka + length_cost + 50);
